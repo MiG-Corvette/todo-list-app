@@ -1,11 +1,21 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.database import engine, get_db
-
-models.Base.metadata.create_all(bind=engine)
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# CORSミドルウェアを追加
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # すべてのオリジンを許可（本番環境では特定のオリジンのみを許可することをお勧めします）
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+models.Base.metadata.create_all(bind=engine)
 
 @app.post("/todos/", response_model=schemas.Todo)
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):

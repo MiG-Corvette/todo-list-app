@@ -1,20 +1,21 @@
+from typing import Optional, Union
 from pydantic import BaseModel
 
 class TodoBase(BaseModel):
     title: str
-    description: str | None = None
+    description: Union[str, None] = None
     completed: bool = False
 
 class TodoCreate(TodoBase):
     pass
 
-class TodoUpdate(TodoBase):
-    title: str | None = None
-    description: str | None = None
-    completed: bool | None = None
+class TodoUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    completed: Optional[bool] = None
 
 class Todo(TodoBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # 以前の orm_mode = True の代わり
