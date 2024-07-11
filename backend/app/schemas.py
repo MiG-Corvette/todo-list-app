@@ -18,4 +18,5 @@ class Todo(TodoBase):
     id: int
 
     class Config:
-        from_attributes = True  # 以前の orm_mode = True の代わり
+        from_attributes = True  # 以前の orm_mode = True の代わりcd
+        
